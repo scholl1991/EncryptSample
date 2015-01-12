@@ -64,6 +64,12 @@
     [[DataSource shared] clearDatabase];
     [[DataSource shared] fillData];
     
+    for (int i = 0; i < 100; i++)
+    {
+        User* user = [[DataSource shared] addUser: nil];
+        [[DataSource shared] addMessage: @{@"senderId":user.userId}];
+    }
+    
     [self measureBlock:^
     {
         for (int i = 0; i < 1000; i++)
@@ -81,7 +87,7 @@
     
     [self measureBlock:^
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 500; i++)
         {
             User* user = [[DataSource shared] addUser: nil];
             [[DataSource shared] addMessage: @{@"senderId":user.userId}];
