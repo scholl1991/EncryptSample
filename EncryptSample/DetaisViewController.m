@@ -1,28 +1,28 @@
 //
-//  ViewController.m
+//  DetaisViewController.m
 //  EncryptSample
 //
-//  Created by Serg Shulga on 1/6/15.
+//  Created by Serg Shulga on 1/9/15.
 //  Copyright (c) 2015 TecSynt. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "DetaisViewController.h"
 #import <CoreData/CoreData.h>
 #import "DataSource.h"
+#import "Message.h"
 #import "Stream.h"
 #import "User.h"
-#import "Message.h"
-#import "DetaisViewController.h"
+#import "File.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+@interface DetaisViewController () <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView* tableView;
 
-@property (nonatomic, strong) NSFetchedResultsController* fetchedResultController;
+@property (nonatomic, strong) NSFetchedResultsController* fetchedResultsController;
 
 @end
 
-@implementation ViewController
+@implementation DetaisViewController
 
 - (void)viewDidLoad
 {
@@ -30,11 +30,11 @@
     
     [self.tableView registerClass: [UITableViewCell class] forCellReuseIdentifier: @"CellIdentifier"];
     
-    self.fetchedResultController = [[DataSource shared] streamsFetchedResultsController];
-    self.fetchedResultController.delegate = self;
+    self.fetchedResultsController = [[DataSource shared] messagesFetchedResultsControllerForStream: self.stream];
+    self.fetchedResultsController.delegate = self;
     
     NSError *error;
-    if (![self.fetchedResultController performFetch:&error]) {
+    if (![self.fetchedResultsController performFetch:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
          
@@ -49,14 +49,19 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.fetchedResultController.sections.count;
+    return self.fetchedResultsController.sections.count;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 100.0;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.fetchedResultController.sections.count > 0)
+    if (self.fetchedResultsController.sections.count > 0)
     {
-        id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultController.sections[section];
+        id <NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
         return [sectionInfo numberOfObjects];
     }
     else
@@ -71,10 +76,11 @@
     
     UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath: indexPath];
     
-    Stream* stream = [self.fetchedResultController objectAtIndexPath: indexPath];
+    Message* message = [self.fetchedResultsController objectAtIndexPath: indexPath];
     
-    cell.textLabel.text = stream.user.name;
-    cell.detailTextLabel.text = [NSString stringWithFormat: @"Messages: %lu", (unsigned long)stream.messages.count];
+    BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath: message.file.thumbPath isDirectory: nil];
+    
+    cell.imageView.image = [UIImage imageWithContentsOfFile: message.file.thumbPath];
     
     return cell;
 }
@@ -83,10 +89,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DetaisViewController* vc = [[UIStoryboard storyboardWithName: @"Main" bundle: nil] instantiateViewControllerWithIdentifier: NSStringFromClass([DetaisViewController class])];
-    vc.stream = [self.fetchedResultController objectAtIndexPath: indexPath];
     
-    [self.navigationController pushViewController: vc animated: YES];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate

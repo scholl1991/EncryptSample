@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
+#import "DataSource.h"
+
 @interface EncryptSampleTests : XCTestCase
 
 @end
@@ -30,10 +32,48 @@
     XCTAssert(YES, @"Pass");
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
+- (void)testNotCachedData
+{
+    [[DataSource shared] clearDatabase];
+    [[DataSource shared] fillData];
+    
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+
+        for (int i = 0; i < 1000; i++)
+        {
+            @autoreleasepool
+            {
+                [[DataSource shared] getStreams];
+                [[DataSource shared] getUsers];
+                [[DataSource shared] resetContext];
+            }
+        }
+        
+    }];
+}
+
+- (void) testMemoryData
+{
+    [[DataSource shared] clearDatabase];
+    [[DataSource shared] fillData];
+    
+    [self measureBlock:^
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            [[DataSource shared] getStreams];
+            [[DataSource shared] getUsers];
+        }
+    }];
+}
+
+- (void) testInsertObjects
+{
+    
+    NSDictionary* dict = @{@"":@"",@"":@"",@"":@""};
+    
+    [self measureBlock:^{
+        
     }];
 }
 
