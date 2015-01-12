@@ -10,6 +10,7 @@
 
 @class Message;
 @class Stream;
+@class User;
 @class NSFetchedResultsController;
 
 @interface DataSource : NSObject
@@ -22,8 +23,12 @@
 - (void) fillData;
 - (void) clearDatabase;
 
+
+// synchronous
 - (void) addMessage: (NSDictionary*) messageInfo;
-- (void) addUser: (NSDictionary*) userInfo;
+- (User*) addUser: (NSDictionary*) userInfo __deprecated_msg("use addNewUser instead");
+// asynchronous (we can use completion block)
+- (void) addNewUser;
 
 
 // Fetching

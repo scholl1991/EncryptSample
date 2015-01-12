@@ -9,7 +9,6 @@
         <!--Navigation Controller-->
         <scene sceneID="OQG-VW-OEZ">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="K2p-30-5vS" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="EaQ-Ld-jWl" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mim-Sz-dM4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -19,6 +18,7 @@
                         <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="vsY-7K-73e"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K2p-30-5vS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-397" y="380"/>
         </scene>
@@ -35,19 +35,34 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qYo-p9-PHJ">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="as5-Ax-oht"/>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="pNv-TA-klv"/>
                                 </connections>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ia-XT-fev">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="5ht-wq-kGt"/>
+                                    <barButtonItem title="Add User" id="Y8r-ll-cJ0">
+                                        <connections>
+                                            <action selector="onAddUser:" destination="vXZ-lx-hvc" id="i3m-WA-yS6"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="oSW-1Q-Vp1"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="qYo-p9-PHJ" secondAttribute="trailing" constant="-16" id="2Ae-a2-oEP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9Ia-XT-fev" secondAttribute="trailing" constant="-16" id="Amb-dJ-Grw"/>
                             <constraint firstItem="qYo-p9-PHJ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="KS6-Iu-UR9"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qYo-p9-PHJ" secondAttribute="bottom" id="lGc-fv-Vlj"/>
+                            <constraint firstItem="9Ia-XT-fev" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="TRb-uM-11Q"/>
+                            <constraint firstItem="9Ia-XT-fev" firstAttribute="top" secondItem="qYo-p9-PHJ" secondAttribute="bottom" id="fL3-a8-0Cn"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="9Ia-XT-fev" secondAttribute="bottom" id="nzS-Ve-1qc"/>
                             <constraint firstItem="qYo-p9-PHJ" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="qkT-mA-vZb"/>
                         </constraints>
                     </view>
@@ -72,20 +87,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="EPN-Df-MT8">
-                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="FNT-t7-ofL" id="Uta-w4-rgV"/>
                                     <outlet property="delegate" destination="FNT-t7-ofL" id="oeT-1P-Zsa"/>
                                 </connections>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="csu-Jd-SvC">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="dWb-s0-L7n"/>
+                                    <barButtonItem title="Add Message" id="7gC-4X-7tp">
+                                        <connections>
+                                            <action selector="onAddMessage:" destination="FNT-t7-ofL" id="RW3-xv-nl7"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="n4x-dG-ubc"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EPN-Df-MT8" firstAttribute="top" secondItem="a7k-me-dRz" secondAttribute="bottom" id="5Ah-r4-724"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EPN-Df-MT8" secondAttribute="trailing" constant="-16" id="5KP-Sx-MNK"/>
-                            <constraint firstItem="Ae8-bI-1md" firstAttribute="top" secondItem="EPN-Df-MT8" secondAttribute="bottom" id="5es-NP-QpA"/>
+                            <constraint firstItem="csu-Jd-SvC" firstAttribute="top" secondItem="EPN-Df-MT8" secondAttribute="bottom" id="CiN-xV-pW1"/>
                             <constraint firstItem="EPN-Df-MT8" firstAttribute="leading" secondItem="FOJ-0g-tm5" secondAttribute="leadingMargin" constant="-16" id="JGl-ob-JPk"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="csu-Jd-SvC" secondAttribute="trailing" constant="-16" id="axS-Lj-76z"/>
+                            <constraint firstItem="Ae8-bI-1md" firstAttribute="top" secondItem="csu-Jd-SvC" secondAttribute="bottom" id="drb-sS-7t6"/>
+                            <constraint firstItem="csu-Jd-SvC" firstAttribute="leading" secondItem="FOJ-0g-tm5" secondAttribute="leadingMargin" constant="-16" id="xLM-1x-ciN"/>
                         </constraints>
                     </view>
                     <connections>

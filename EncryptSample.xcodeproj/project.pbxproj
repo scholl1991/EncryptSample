@@ -17,13 +17,13 @@
 		A40D37B31A60814A0079E03C /* DetaisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40D37B21A6081490079E03C /* DetaisViewController.m */; };
 		A4BE09951A5C16250071FF2B /* EncryptSample.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A4BE09931A5C16250071FF2B /* EncryptSample.xcdatamodeld */; };
 		A4BE09981A5C16510071FF2B /* DataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE09971A5C16510071FF2B /* DataSource.m */; };
-		A4BE09AA1A5C20FC0071FF2B /* eliz.JPG in Resources */ = {isa = PBXBuildFile; fileRef = A4BE09A71A5C20FC0071FF2B /* eliz.JPG */; };
-		A4BE09AB1A5C20FC0071FF2B /* yura.JPG in Resources */ = {isa = PBXBuildFile; fileRef = A4BE09A81A5C20FC0071FF2B /* yura.JPG */; };
-		A4BE09AC1A5C20FC0071FF2B /* boi.JPG in Resources */ = {isa = PBXBuildFile; fileRef = A4BE09A91A5C20FC0071FF2B /* boi.JPG */; };
 		A4BE09BB1A5D4F370071FF2B /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE09BA1A5D4F370071FF2B /* Message.m */; };
 		A4BE09BE1A5D4F380071FF2B /* File.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE09BD1A5D4F380071FF2B /* File.m */; };
 		A4BE09C11A5D4F380071FF2B /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE09C01A5D4F380071FF2B /* User.m */; };
 		A4BE09C41A5D4F380071FF2B /* Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE09C31A5D4F380071FF2B /* Stream.m */; };
+		A4F049E41A646D230099E7A3 /* franko.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F049E31A646D230099E7A3 /* franko.png */; };
+		A4F049E61A646D2B0099E7A3 /* yura.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F049E51A646D2B0099E7A3 /* yura.png */; };
+		A4F049E81A646D330099E7A3 /* eliz.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F049E71A646D330099E7A3 /* eliz.png */; };
 		AAAE9204C3807FDCFC4EE25A /* libPods-EncryptSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2131765754E5E6BF954B029F /* libPods-EncryptSample.a */; };
 /* End PBXBuildFile section */
 
@@ -58,9 +58,6 @@
 		A4BE09941A5C16250071FF2B /* SpyCD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SpyCD.xcdatamodel; sourceTree = "<group>"; };
 		A4BE09961A5C16510071FF2B /* DataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSource.h; sourceTree = "<group>"; };
 		A4BE09971A5C16510071FF2B /* DataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSource.m; sourceTree = "<group>"; };
-		A4BE09A71A5C20FC0071FF2B /* eliz.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = eliz.JPG; sourceTree = "<group>"; };
-		A4BE09A81A5C20FC0071FF2B /* yura.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = yura.JPG; sourceTree = "<group>"; };
-		A4BE09A91A5C20FC0071FF2B /* boi.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = boi.JPG; sourceTree = "<group>"; };
 		A4BE09B91A5D4F370071FF2B /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		A4BE09BA1A5D4F370071FF2B /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		A4BE09BC1A5D4F380071FF2B /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = File.h; sourceTree = "<group>"; };
@@ -69,6 +66,9 @@
 		A4BE09C01A5D4F380071FF2B /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		A4BE09C21A5D4F380071FF2B /* Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stream.h; sourceTree = "<group>"; };
 		A4BE09C31A5D4F380071FF2B /* Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stream.m; sourceTree = "<group>"; };
+		A4F049E31A646D230099E7A3 /* franko.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = franko.png; sourceTree = "<group>"; };
+		A4F049E51A646D2B0099E7A3 /* yura.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yura.png; sourceTree = "<group>"; };
+		A4F049E71A646D330099E7A3 /* eliz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eliz.png; sourceTree = "<group>"; };
 		F458FE8CDC28C4858C5436C1 /* Pods-EncryptSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EncryptSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EncryptSample/Pods-EncryptSample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,9 +194,9 @@
 		A4BE09A61A5C20EC0071FF2B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A4BE09A71A5C20FC0071FF2B /* eliz.JPG */,
-				A4BE09A81A5C20FC0071FF2B /* yura.JPG */,
-				A4BE09A91A5C20FC0071FF2B /* boi.JPG */,
+				A4F049E31A646D230099E7A3 /* franko.png */,
+				A4F049E51A646D2B0099E7A3 /* yura.png */,
+				A4F049E71A646D330099E7A3 /* eliz.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -283,11 +283,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4BE09AA1A5C20FC0071FF2B /* eliz.JPG in Resources */,
+				A4F049E81A646D330099E7A3 /* eliz.png in Resources */,
 				A40857F21A5C12A000C75991 /* Main.storyboard in Resources */,
 				A40857F71A5C12A000C75991 /* LaunchScreen.xib in Resources */,
-				A4BE09AC1A5C20FC0071FF2B /* boi.JPG in Resources */,
-				A4BE09AB1A5C20FC0071FF2B /* yura.JPG in Resources */,
+				A4F049E41A646D230099E7A3 /* franko.png in Resources */,
+				A4F049E61A646D2B0099E7A3 /* yura.png in Resources */,
 				A40857F41A5C12A000C75991 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

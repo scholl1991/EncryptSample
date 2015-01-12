@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 
 #import "DataSource.h"
+#import "User.h"
 
 @interface EncryptSampleTests : XCTestCase
 
@@ -36,6 +37,12 @@
 {
     [[DataSource shared] clearDatabase];
     [[DataSource shared] fillData];
+    
+    for (int i = 0; i < 100; i++)
+    {
+        User* user = [[DataSource shared] addUser: nil];
+        [[DataSource shared] addMessage: @{@"senderId":user.userId}];
+    }
     
     [self measureBlock:^{
 
@@ -69,11 +76,16 @@
 
 - (void) testInsertObjects
 {
+    [[DataSource shared] clearDatabase];
+    [[DataSource shared] fillData];
     
-    NSDictionary* dict = @{@"":@"",@"":@"",@"":@""};
-    
-    [self measureBlock:^{
-        
+    [self measureBlock:^
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            User* user = [[DataSource shared] addUser: nil];
+            [[DataSource shared] addMessage: @{@"senderId":user.userId}];
+        }
     }];
 }
 

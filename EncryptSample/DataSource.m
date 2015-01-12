@@ -23,6 +23,8 @@ static DataSource* dataSourceInstance = nil;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic, strong) NSArray* photoPaths;
+
 @end
 
 @implementation DataSource
@@ -47,16 +49,16 @@ static DataSource* dataSourceInstance = nil;
 {
     NSManagedObjectContext *context = [self managedObjectContext];
     
-    NSArray* names = @[@"eliz", @"yura", @"boi"];
+    NSArray* names = @[@"eliz", @"yura", @"franko"];
     NSMutableArray* paths = [NSMutableArray array];
     
     for (int i = 0; i < names.count; i++)
     {
         NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsDir = [documentPaths objectAtIndex:0];
-        NSString *newPath = [documentsDir stringByAppendingPathComponent: [NSString stringWithFormat: @"%@.JPG", names[i]]];
+        NSString *newPath = [documentsDir stringByAppendingPathComponent: [NSString stringWithFormat: @"%@.png", names[i]]];
 
-        NSString* curPath = [[NSBundle mainBundle] pathForResource: names[i] ofType: @"JPG"];
+        NSString* curPath = [[NSBundle mainBundle] pathForResource: names[i] ofType: @"png"];
         
         NSError* error = nil;
         
@@ -66,36 +68,38 @@ static DataSource* dataSourceInstance = nil;
         [paths addObject: newPath];
     }
     
+    self.photoPaths = paths;
+    
     // Files
     File* file1 = [NSEntityDescription
                    insertNewObjectForEntityForName:@"File"
                    inManagedObjectContext:context];
-    file1.filePath = paths[arc4random()%paths.count];
-    file1.thumbPath = paths[arc4random()%paths.count];
+    file1.filePath = [self randomFilePath];
+    file1.thumbPath = [self randomFilePath];
     
     File* file2 = [NSEntityDescription
                    insertNewObjectForEntityForName:@"File"
                    inManagedObjectContext:context];
-    file2.filePath = paths[arc4random()%paths.count];
-    file2.thumbPath = paths[arc4random()%paths.count];
+    file2.filePath = [self randomFilePath];
+    file2.thumbPath = [self randomFilePath];
     
     File* file3 = [NSEntityDescription
                    insertNewObjectForEntityForName:@"File"
                    inManagedObjectContext:context];
-    file3.filePath = paths[arc4random()%paths.count];
-    file3.thumbPath = paths[arc4random()%paths.count];
+    file3.filePath = [self randomFilePath];
+    file3.thumbPath = [self randomFilePath];
     
     File* file4 = [NSEntityDescription
                    insertNewObjectForEntityForName:@"File"
                    inManagedObjectContext:context];
-    file4.filePath = paths[arc4random()%paths.count];
-    file4.thumbPath = paths[arc4random()%paths.count];
+    file4.filePath = [self randomFilePath];
+    file4.thumbPath = [self randomFilePath];
     
     File* file5 = [NSEntityDescription
                    insertNewObjectForEntityForName:@"File"
                    inManagedObjectContext:context];
-    file5.filePath = paths[arc4random()%paths.count];
-    file5.thumbPath = paths[arc4random()%paths.count];
+    file5.filePath = [self randomFilePath];
+    file5.thumbPath = [self randomFilePath];
     
     // Messages
     Message* message1 = [NSEntityDescription
@@ -193,6 +197,13 @@ static DataSource* dataSourceInstance = nil;
     _managedObjectContext       = nil;
     _managedObjectModel         = nil;
     _persistentStoreCoordinator = nil;
+}
+
+#pragma mark - Private stuff
+
+- (NSString*) randomFilePath
+{
+    return self.photoPaths[arc4random()%self.photoPaths.count];
 }
 
 #pragma mark - Fetching data
@@ -347,6 +358,9 @@ static DataSource* dataSourceInstance = nil;
 
 #pragma mark - Add data
 
+static int userId = 4;
+static int messageId = 6;
+
 - (void) addMessage: (NSDictionary*) messageInfo
 {
     NSManagedObjectContext *context = [self managedObjectContext];
@@ -354,14 +368,17 @@ static DataSource* dataSourceInstance = nil;
     File* file = [NSEntityDescription
                    insertNewObjectForEntityForName:@"File"
                    inManagedObjectContext:context];
-    file.filePath = messageInfo[@"filePath"];
-    file.thumbPath = messageInfo[@"thumbPath"];
+    file.filePath = [self randomFilePath];
+    file.thumbPath = [self randomFilePath];
     
     Message* message = [NSEntityDescription
                          insertNewObjectForEntityForName:@"Message"
                          inManagedObjectContext:context];
-    message.messageId = messageInfo[@"messageId"];
+    message.messageId = [NSString stringWithFormat: @"%d", messageId];
     message.file = file;
+    message.date = [NSDate date];
+    
+    messageId++;
     
     User* user = [self getUserById: messageInfo[@"senderId"]];
     
@@ -386,17 +403,79 @@ static DataSource* dataSourceInstance = nil;
     [self saveContext];
 }
 
-- (void) addUser: (NSDictionary*) userInfo
+- (User*) addUser: (NSDictionary*) userInfo
 {
     NSManagedObjectContext *context = [self managedObjectContext];
     
-    User* user1 = [NSEntityDescription
+    User* user = [NSEntityDescription
                    insertNewObjectForEntityForName:@"User"
                    inManagedObjectContext:context];
-    user1.userId = userInfo[@"userId"];
-    user1.name = userInfo[@"username"];
+    user.userId = [NSString stringWithFormat: @"%d", userId];
+    user.name = [NSString stringWithFormat: @"User %d", userId];
+    
+    userId++;
     
     [self saveContext];
+    
+    return user;
+}
+
+- (void) addNewUser
+{
+    NSManagedObjectContext *temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    temporaryContext.parentContext = self.managedObjectContext;
+    
+    [temporaryContext performBlock: ^
+     {
+         User* user = [NSEntityDescription
+                        insertNewObjectForEntityForName:@"User"
+                        inManagedObjectContext: temporaryContext];
+         user.userId = [NSString stringWithFormat: @"%d", userId];
+         user.name = [NSString stringWithFormat: @"User %d", userId];
+         
+         userId++;
+         
+         // Stream for user
+         Stream* stream = [NSEntityDescription
+                            insertNewObjectForEntityForName:@"Stream"
+                            inManagedObjectContext: temporaryContext];
+         stream.streamId = user.userId;
+         stream.user = user;
+         
+         // Message
+         File* file = [NSEntityDescription
+                       insertNewObjectForEntityForName:@"File"
+                       inManagedObjectContext: temporaryContext];
+         file.filePath = [self randomFilePath];
+         file.thumbPath = [self randomFilePath];
+         
+         Message* message = [NSEntityDescription
+                             insertNewObjectForEntityForName:@"Message"
+                             inManagedObjectContext: temporaryContext];
+         message.messageId = [NSString stringWithFormat: @"%d", messageId];
+         message.date = [NSDate date];
+         message.file = file;
+         message.sender = user;
+         [message addStreamsObject: stream];
+         
+         messageId++;
+         
+         // push to parent
+         NSError *error;
+         if (![temporaryContext save: &error])
+         {
+             // handle error
+         }
+         
+         // save parent to disk asynchronously
+         [self.managedObjectContext performBlock:^{
+             NSError *error;
+             if (![self.managedObjectContext save: &error])
+             {
+                 // handle error
+             }
+         }];
+     }];
 }
 
 #pragma mark - Core Data Context Management
@@ -484,7 +563,7 @@ static DataSource* dataSourceInstance = nil;
     if (!coordinator) {
         return nil;
     }
-    _managedObjectContext = [[NSManagedObjectContext alloc] init];
+    _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSMainQueueConcurrencyType];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     return _managedObjectContext;
 }

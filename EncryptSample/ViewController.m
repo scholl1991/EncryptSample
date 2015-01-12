@@ -45,6 +45,13 @@
     }
 }
 
+#pragma mark - Actions
+
+- (IBAction) onAddUser: (id) sender
+{
+    [[DataSource shared] addNewUser];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView

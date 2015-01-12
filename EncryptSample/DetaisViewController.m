@@ -8,6 +8,7 @@
 
 #import "DetaisViewController.h"
 #import <CoreData/CoreData.h>
+#import "UIImageView+WebCache.h"
 #import "DataSource.h"
 #import "Message.h"
 #import "Stream.h"
@@ -45,6 +46,13 @@
     }
 }
 
+#pragma mark - Actions
+
+- (IBAction) onAddMessage: (id) sender
+{
+    [[DataSource shared] addMessage: @{@"senderId" : self.stream.user.userId}];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -78,9 +86,20 @@
     
     Message* message = [self.fetchedResultsController objectAtIndexPath: indexPath];
     
-    BOOL exist = [[NSFileManager defaultManager] fileExistsAtPath: message.file.thumbPath isDirectory: nil];
-    
     cell.imageView.image = [UIImage imageWithContentsOfFile: message.file.thumbPath];
+    
+//    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+//    
+//    dispatch_async(queue, ^
+//    {
+//        UIImage *image = [UIImage imageWithContentsOfFile: message.file.thumbPath];
+//        
+//        dispatch_sync(dispatch_get_main_queue(), ^
+//        {
+//            cell.imageView.image = image;
+//            [cell setNeedsLayout];
+//        });
+//    });
     
     return cell;
 }
