@@ -8,7 +8,6 @@
 
 #import "DetaisViewController.h"
 #import <CoreData/CoreData.h>
-#import "UIImageView+WebCache.h"
 #import "DataSource.h"
 #import "Message.h"
 #import "Stream.h"
