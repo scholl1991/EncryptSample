@@ -26,15 +26,17 @@
 
 // synchronous
 - (void) addMessage: (NSDictionary*) messageInfo;
-- (User*) addUser: (NSDictionary*) userInfo __deprecated_msg("use addNewUser instead");
+- (User*) addUser: (NSDictionary*) userInfo;
 // asynchronous (we can use completion block)
 - (void) addNewUser;
+- (void) addNewUserWithCompletion: (void(^)(NSError* error)) completionBlock;
 
 
 // Fetching
 - (NSArray*) getStreams;
 - (NSArray*) getUsers;
 - (Message*) getMessageById: (NSString*) messageId;
+- (void) getStreamsWithCompletion:(void (^)(NSArray *objects, NSError *error))completion; // it's a background fetching
 
 - (NSFetchedResultsController*) streamsFetchedResultsController;
 - (NSFetchedResultsController*) messagesFetchedResultsControllerForStream: (Stream*) stream;

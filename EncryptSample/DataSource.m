@@ -356,6 +356,56 @@ static DataSource* dataSourceInstance = nil;
     return frc;
 }
 
+#pragma mark - ONLY FOR TEST
+
+- (void) getStreamsWithCompletion:(void (^)(NSArray *objects, NSError *error))completion
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription
+                                   entityForName:@"Stream" inManagedObjectContext: self.managedObjectContext];
+    [fetchRequest setEntity:entity];
+    
+    NSSortDescriptor *sort = [[NSSortDescriptor alloc]
+                              initWithKey:@"user.name" ascending: YES];
+    [fetchRequest setSortDescriptors:@[sort]];
+    
+    NSManagedObjectContext *backgroundContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    backgroundContext.parentContext = self.managedObjectContext;
+    
+    [backgroundContext performBlock:^{
+        
+        // Fetch into shared persistent store in background thread
+        NSError *error = nil;
+        NSArray *fetchedObjects = [backgroundContext executeFetchRequest: fetchRequest error:&error];
+        
+        [self.managedObjectContext performBlock:^{
+            if (fetchedObjects) {
+                // Collect object IDs
+                NSMutableArray *mutObjectIds = [[NSMutableArray alloc] initWithCapacity:[fetchedObjects count]];
+                for (NSManagedObject *obj in fetchedObjects) {
+                    [mutObjectIds addObject:obj.objectID];
+                }
+                
+                // Fault in objects into current context by object ID as they are available in the shared persistent store
+                NSMutableArray *mutObjects = [[NSMutableArray alloc] initWithCapacity:[mutObjectIds count]];
+                for (NSManagedObjectID *objectID in mutObjectIds) {
+                    NSManagedObject *obj = [self.managedObjectContext objectWithID:objectID];
+                    [mutObjects addObject:obj];
+                }
+                
+                if (completion) {
+                    NSArray *objects = [mutObjects copy];
+                    completion(objects, nil);
+                }
+            } else {
+                if (completion) {
+                    completion(nil, error);
+                }
+            }
+        }];
+    }];
+}
+
 #pragma mark - Add data
 
 static int userId = 4;
@@ -422,14 +472,19 @@ static int messageId = 6;
 
 - (void) addNewUser
 {
+    [self addNewUserWithCompletion: nil];
+}
+
+- (void) addNewUserWithCompletion: (void(^)(NSError* error)) completionBlock
+{
     NSManagedObjectContext *temporaryContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     temporaryContext.parentContext = self.managedObjectContext;
     
     [temporaryContext performBlock: ^
      {
          User* user = [NSEntityDescription
-                        insertNewObjectForEntityForName:@"User"
-                        inManagedObjectContext: temporaryContext];
+                       insertNewObjectForEntityForName:@"User"
+                       inManagedObjectContext: temporaryContext];
          user.userId = [NSString stringWithFormat: @"%d", userId];
          user.name = [NSString stringWithFormat: @"User %d", userId];
          
@@ -437,8 +492,8 @@ static int messageId = 6;
          
          // Stream for user
          Stream* stream = [NSEntityDescription
-                            insertNewObjectForEntityForName:@"Stream"
-                            inManagedObjectContext: temporaryContext];
+                           insertNewObjectForEntityForName:@"Stream"
+                           inManagedObjectContext: temporaryContext];
          stream.streamId = user.userId;
          stream.user = user;
          
@@ -470,9 +525,12 @@ static int messageId = 6;
          // save parent to disk asynchronously
          [self.managedObjectContext performBlock:^{
              NSError *error;
-             if (![self.managedObjectContext save: &error])
+             [self.managedObjectContext save: &error];
+             if (completionBlock != nil)
              {
-                 // handle error
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     completionBlock(error);
+                 });
              }
          }];
      }];

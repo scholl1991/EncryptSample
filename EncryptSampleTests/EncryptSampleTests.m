@@ -20,7 +20,9 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    [[DataSource shared] clearDatabase];
+    [[DataSource shared] fillData];
 }
 
 - (void)tearDown {
@@ -28,16 +30,52 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
+- (void)testMultithreading
+{
+//    XCTAssert(YES, @"Pass");
+//    XCTAssertTrue(YES, "saveToURL failed");
+    
+//    for (int i = 0; i < 100; i++)
+//    {
+//        User* user = [[DataSource shared] addUser: nil];
+//        [[DataSource shared] addMessage: @{@"senderId":user.userId}];
+//    }
+    
+    for (int i = 0; i < 100; i++)
+    {
+        XCTestExpectation* expectation = [self expectationWithDescription: [NSString stringWithFormat:@"com.tecsynt.multithreading%d", i]];
+        XCTestExpectation* fetchExpectation = [self expectationWithDescription: [NSString stringWithFormat:@"com.tecsynt.multithreading%d", i+1000]];
+        [[DataSource shared] addNewUserWithCompletion:^(NSError *error)
+        {
+            NSLog(@"added");
+            [expectation fulfill];
+        }];
+        [[DataSource shared] getStreamsWithCompletion:^(NSArray *objects, NSError *error)
+        {
+            NSLog(@"objects.count = %d", objects.count);
+            [fetchExpectation fulfill];
+        }];
+    }
+    
+    [self waitForExpectationsWithTimeout: 30.0 handler:^(NSError *error) {
+        XCTAssertNil(error, @"Bad day");
+    }];
+}
+
+- (void) startFetching
+{
+    for (int i = 0; i < 10; i++)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSArray* streams = [[DataSource shared] getStreams];
+            NSArray* users = [[DataSource shared] getUsers];
+            NSLog(@"streams.count = %d, users.count = %d", streams.count, users.count);
+        });
+    }
 }
 
 - (void)testNotCachedData
 {
-    [[DataSource shared] clearDatabase];
-    [[DataSource shared] fillData];
-    
     for (int i = 0; i < 100; i++)
     {
         User* user = [[DataSource shared] addUser: nil];
@@ -50,8 +88,9 @@
         {
             @autoreleasepool
             {
-                [[DataSource shared] getStreams];
-                [[DataSource shared] getUsers];
+                NSArray* arr1 = [[DataSource shared] getStreams];
+                NSArray* arr2 = [[DataSource shared] getUsers];
+//                NSLog(@"arr1.count = %d, arr2.count = %d", arr1.count, arr2.count);
                 [[DataSource shared] resetContext];
             }
         }
@@ -61,9 +100,6 @@
 
 - (void) testMemoryData
 {
-    [[DataSource shared] clearDatabase];
-    [[DataSource shared] fillData];
-    
     for (int i = 0; i < 100; i++)
     {
         User* user = [[DataSource shared] addUser: nil];
@@ -82,9 +118,6 @@
 
 - (void) testInsertObjects
 {
-    [[DataSource shared] clearDatabase];
-    [[DataSource shared] fillData];
-    
     [self measureBlock:^
     {
         for (int i = 0; i < 500; i++)
